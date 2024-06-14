@@ -1,11 +1,32 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MainTemplate from "./template/MainTemplate";
+import HomePage from "./pages/HomePage";
+import UserPage from "./pages/UserPage";
+import ErrorPage from "./pages/ErrorPage";
+import PAGE_PATH from "./constant/pagePath";
+import SingupPage from "./pages/SingupPage";
+import MessageProvider from "./components/provider/MessageProvider";
+import LoginPage from "./pages/LoginPage";
+import PriviateRoute from "./HOC/PriviateRoute";
+
 function App() {
   return (
-    <div className="container mx-auto">
-      <div className="flex justify-around">
-        <h1 className="border border-solid border-transparent hover:border-cyan-500 transition-all duration-700">Admin Template</h1>
-        <h1 className="bg-red-900 text-white w-1/2">Admin Template</h1>
-      </div>
-    </div>
+    <MessageProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="" element={<PriviateRoute components={<MainTemplate />} isAuth={true} />}>
+            <Route index path={PAGE_PATH.home} Component={HomePage} />
+            <Route path={PAGE_PATH.user} Component={UserPage} />
+            <Route path="*" Component={ErrorPage} />
+          </Route>
+
+          {/* auth page */}
+          <Route path={PAGE_PATH.singup} Component={SingupPage} />
+          <Route path={PAGE_PATH.login} Component={LoginPage} />
+
+        </Routes>
+      </BrowserRouter>
+    </MessageProvider>
   );
 }
 
