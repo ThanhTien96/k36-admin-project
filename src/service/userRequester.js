@@ -9,4 +9,11 @@ export default class UserRequester {
         })
     };
 
+    static async listUser() {
+        return await clientAxios({
+            url: "/user",
+            method: "GET"
+        });
+    }
+
 }

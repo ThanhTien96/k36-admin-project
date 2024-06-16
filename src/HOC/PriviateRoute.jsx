@@ -1,14 +1,33 @@
-import React, { useState } from 'react'
-import { Navigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
+import PAGE_PATH from "../constant/pagePath";
 
-function PriviateRoute({path, components: Component, isAuth, isAdmin}) {
-    const [profile, setProfile] = useState(true);
+function PriviateRoute({
+  path = PAGE_PATH.login,
+  components: Component,
+  isAuth,
+  isAdmin,
+}) {
+  const [profile, setProfile] = useState(true);
 
-  if(!isAdmin && !profile && !isAuth) {
-    return <Navigate to="/login" />
+  if (isAuth) {
+    if (!profile) {
+      return <Navigate to={path} />;
+    } else {
+      return <Component />;
+    }
   }
 
-  return <Component />
+  if (isAdmin) {
+    if (!profile) {
+      return <Navigate to={path} />;
+    } else if (profile.role === "ADMIN") {
+      return <Component />;
+    } else {
+      return <Navigate to={path} />;
+    }
+  }
+  return <Component />;
 }
 
-export default PriviateRoute
+export default PriviateRoute;

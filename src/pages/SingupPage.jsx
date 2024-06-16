@@ -1,12 +1,16 @@
 import { useFormik } from "formik";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UploadImg from "../components/UploadImage";
 import * as yup from "yup";
-import clientAxios from "../http/client";
 import UserRequester from "../service/userRequester";
+import { useDispatch } from "react-redux";
+import { updateMessage } from "../store/app/reducer";
+import PAGE_PATH from "../constant/pagePath";
 
 const SingupPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -15,6 +19,7 @@ const SingupPage = () => {
       email: "",
       date_of_birth: "",
       avatar: "",
+      role: "admin"
     },
     validationSchema: yup.object({
       username: yup.string().required("user name is required!"),
@@ -27,9 +32,12 @@ const SingupPage = () => {
     onSubmit: async (value) => {
       try {
         const res = await UserRequester.singup(value);
-
+        if(res.status === 201) {
+          navigate("/login");
+          dispatch(updateMessage({message: "Register successfully.", status: "success"}));
+        }
       } catch (err) {
-        console.log(err);
+        dispatch(updateMessage({message: err.response.data, status: "error"}));
       }
     },
   });

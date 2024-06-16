@@ -8,25 +8,59 @@ import SingupPage from "./pages/SingupPage";
 import MessageProvider from "./components/provider/MessageProvider";
 import LoginPage from "./pages/LoginPage";
 import PriviateRoute from "./HOC/PriviateRoute";
+import { Provider } from "react-redux";
+import store from "./store";
+import HelmetProvider from "./components/provider/HelmetProvider";
 
 function App() {
   return (
-    <MessageProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="" element={<PriviateRoute components={<MainTemplate />} isAuth={true} />}>
-            <Route index path={PAGE_PATH.home} Component={HomePage} />
-            <Route path={PAGE_PATH.user} Component={UserPage} />
-            <Route path="*" Component={ErrorPage} />
-          </Route>
+    <Provider store={store}>
+      <HelmetProvider>
+        <MessageProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path=""
+                element={
+                  <PriviateRoute
+                    components={MainTemplate}
+                    isAuth
+                    path={PAGE_PATH.login}
+                  />
+                }
+              >
+                <Route
+                  index
+                  path={PAGE_PATH.home}
+                  element={
+                    <PriviateRoute
+                      components={HomePage}
+                      isAuth={true}
+                      path={PAGE_PATH.login}
+                    />
+                  }
+                />
+                <Route
+                  path={PAGE_PATH.user}
+                  element={
+                    <PriviateRoute
+                      path={PAGE_PATH.login}
+                      isAuth={true}
+                      components={UserPage}
+                    />
+                  }
+                />
+                <Route path="*" Component={ErrorPage} />
+              </Route>
 
-          {/* auth page */}
-          <Route path={PAGE_PATH.singup} Component={SingupPage} />
-          <Route path={PAGE_PATH.login} Component={LoginPage} />
-
-        </Routes>
-      </BrowserRouter>
-    </MessageProvider>
+              {/* auth page */}
+              <Route path={PAGE_PATH.singup} Component={SingupPage} />
+              <Route path={PAGE_PATH.login} Component={LoginPage} />
+            </Routes>
+          </BrowserRouter>
+        </MessageProvider>
+      </HelmetProvider>
+    </Provider>
   );
 }
 
