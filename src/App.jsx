@@ -11,30 +11,23 @@ import PriviateRoute from "./HOC/PriviateRoute";
 import { Provider } from "react-redux";
 import store from "./store";
 import HelmetProvider from "./components/provider/HelmetProvider";
+import { App as AppProvider } from "antd";
 
 function App() {
   return (
-    <Provider store={store}>
+   <AppProvider >
+     <Provider store={store}>
       <HelmetProvider>
         <MessageProvider>
           <BrowserRouter>
             <Routes>
-              <Route
-                path=""
-                element={
-                  <PriviateRoute
-                    components={MainTemplate}
-                    isAuth
-                    path={PAGE_PATH.login}
-                  />
-                }
-              >
+              <Route path="" element={<MainTemplate />}>
                 <Route
                   index
                   path={PAGE_PATH.home}
                   element={
                     <PriviateRoute
-                      components={HomePage}
+                      element={<PriviateRoute components={HomePage} isAuth={true} />}
                       isAuth={true}
                       path={PAGE_PATH.login}
                     />
@@ -61,6 +54,7 @@ function App() {
         </MessageProvider>
       </HelmetProvider>
     </Provider>
+   </AppProvider>
   );
 }
 

@@ -5,8 +5,7 @@ import UploadImg from "../components/UploadImage";
 import * as yup from "yup";
 import UserRequester from "../service/userRequester";
 import { useDispatch } from "react-redux";
-import { updateMessage } from "../store/app/reducer";
-import PAGE_PATH from "../constant/pagePath";
+import { MESSAGE_STATUS, setAlert } from "../store/app/alertSlice";
 
 const SingupPage = () => {
   const dispatch = useDispatch();
@@ -34,10 +33,10 @@ const SingupPage = () => {
         const res = await UserRequester.singup(value);
         if(res.status === 201) {
           navigate("/login");
-          dispatch(updateMessage({message: "Register successfully.", status: "success"}));
+          dispatch(setAlert({message: "Register successfully.", status: MESSAGE_STATUS.success}));
         }
       } catch (err) {
-        dispatch(updateMessage({message: err.response.data, status: "error"}));
+        dispatch(setAlert({message: err.response.data, status: MESSAGE_STATUS.error}));
       }
     },
   });

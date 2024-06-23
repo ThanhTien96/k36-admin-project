@@ -3,7 +3,8 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const MessageProvider = (props) => {
-  const { message, status, logs } = useSelector((state) => state.app.message);
+  const { message, status, logs } = useSelector((state) => state.alert);
+
 
   const mesageOptions = {
     error: _message.error,
@@ -15,7 +16,7 @@ const MessageProvider = (props) => {
 
   useEffect(() => {
     if(message !== "N/A") {
-      mesageOptions[status](message, 0.5)
+      mesageOptions[status](message, 0.9)
     }
   },[logs])
 
