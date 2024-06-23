@@ -40,6 +40,7 @@ const LoginPage = () => {
           } else if (findUser.password.includes(value.password)) {
 
             dispatch(setAuthProfile(findUser));
+            localStorage.setItem("profile", JSON.stringify(findUser));
             dispatch(
               setAlert({
                 message: "Login successfully.",

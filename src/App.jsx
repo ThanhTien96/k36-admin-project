@@ -8,38 +8,45 @@ import SingupPage from "./pages/SingupPage";
 import MessageProvider from "./components/provider/MessageProvider";
 import LoginPage from "./pages/LoginPage";
 import PriviateRoute from "./HOC/PriviateRoute";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from "./store";
 import HelmetProvider from "./components/provider/HelmetProvider";
 import { App as AppProvider } from "antd";
+import { useEffect } from "react";
+import { setAuthProfile } from "./store/app/authSlice";
 
 function App() {
+  
+  
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const profileLocal = JSON.parse(localStorage.getItem("profile"));
+    if(profileLocal) {
+      dispatch(setAuthProfile(profileLocal));
+    }
+  },[]);
+
   return (
    <AppProvider >
-     <Provider store={store}>
       <HelmetProvider>
         <MessageProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="" element={<MainTemplate />}>
+              <Route path="" element={<PriviateRoute components={<MainTemplate />} />}>
                 <Route
                   index
                   path={PAGE_PATH.home}
                   element={
-                    <PriviateRoute
-                      element={<PriviateRoute components={HomePage} isAuth={true} />}
-                      isAuth={true}
-                      path={PAGE_PATH.login}
-                    />
+                    <PriviateRoute components={<HomePage />} />
                   }
                 />
                 <Route
                   path={PAGE_PATH.user}
                   element={
                     <PriviateRoute
-                      path={PAGE_PATH.login}
-                      isAuth={true}
-                      components={UserPage}
+                      isAdmin={true}
+                      components={<UserPage />}
                     />
                   }
                 />
@@ -53,7 +60,6 @@ function App() {
           </BrowserRouter>
         </MessageProvider>
       </HelmetProvider>
-    </Provider>
    </AppProvider>
   );
 }

@@ -20,7 +20,8 @@ const authSlice = createSlice({
             state.role = action.payload;
         },
         setAuthProfile(state, action) {
-            state.auth = AUTH_STATE.auth;
+            state.isAuth = AUTH_STATE.auth;
+            state.role = action.payload.role;
             state.profile = action.payload;
         }
     }

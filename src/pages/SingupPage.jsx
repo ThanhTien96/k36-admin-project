@@ -18,7 +18,7 @@ const SingupPage = () => {
       email: "",
       date_of_birth: "",
       avatar: "",
-      role: "admin"
+      role: "user"
     },
     validationSchema: yup.object({
       username: yup.string().required("user name is required!"),

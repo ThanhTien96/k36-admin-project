@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import PAGE_PATH from "../constant/pagePath";
 import { useSelector } from "react-redux";
 import { AUTH_STATE } from "../store/app/authSlice";
 
 function PriviateRoute({
-  path = PAGE_PATH.login,
   components: Component,
+  isAdmin
 }) {
   const {profile, isAuth, role} = useSelector(store => store.auth);
 
-  if(isAuth === AUTH_STATE.auth && profile) {
+  if(!isAdmin && isAuth === AUTH_STATE.auth && profile) {
+    console.log("object");
     return Component
+  } else if(isAdmin && isAuth === AUTH_STATE.auth && profile) {
+
+    if(role === "admin") {
+      return Component
+    } else {
+      return <Navigate to="/login" />
+    }
   } else {
     return <Navigate to="/login" />
   }
